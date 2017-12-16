@@ -191,8 +191,6 @@ public class friendPanel extends JPanel {
 			friendImg.add(new JLabel(new ImageIcon("src/friendListImg/"+user.getStateImg())));
 			stateLabel.add(new JLabel(user.getStateMsg()));
 			
-			System.out.println("/////"+user.getStateImg());
-			
 			friendImg.get(i).setBounds(10, 145 + (i * 81), 80, 80);
 			friendImg.get(i).setBackground(Color.white);
 			friendImg.get(i).setOpaque(true);

@@ -120,8 +120,10 @@ public class Server extends JFrame{
 	}
 
 	public void exitUser(User user) {
+		//backupUser,backup
 		clientManager.exitUser(user);
 		roomManager.exitUser(user);
+		
 	}
 	
 	/*메시지 처리*/
@@ -134,6 +136,12 @@ public class Server extends JFrame{
 	public void usersUpdateFriendList(String newUser) {
 		clientManager.usersUpdateFriendList(newUser);
 	}
+	
+	/*// 기존 유저가 다시 접속 할 경우 기존의 유저들의 리스트를 업데이트
+	public void usersUpdateFriendList(String newUser, String stateImg, String stateMsg) {
+		clientManager.usersUpdateFriendList(newUser,stateImg,stateMsg);
+	}*/
+		
 	//유저의 상태이미지나 상태메시지 변경이 있다면 모든 유저들의 화면을 갱신
 	public void userInfoUpdate(String userName,String stateImg,String stateMsg) {
 		clientManager.userInfoUpdate(userName,stateImg,stateMsg);
@@ -141,8 +149,8 @@ public class Server extends JFrame{
 
 	public void createSingleRoom(User user,String myName,String friendName) {
 		ArrayList<User> users = new ArrayList<User>();
-		User me = clientManager.searchByUserName(myName);
-		User friend = clientManager.searchByUserName(friendName);
+		User me = clientManager.searchByUserNameInOnline(myName);
+		User friend = clientManager.searchByUserNameInOnline(friendName);
 	
 		String roomName=me.getNickname()+"와"+friend.getNickname()+"의 채팅방";
 		if(friend==null) {
@@ -165,7 +173,7 @@ public class Server extends JFrame{
 		ArrayList<User> users = new ArrayList<User>();
 		String roomName="";
 		for(int i=0;i<mutiRoomUserList.size();i++) {
-			User user = clientManager.searchByUserName(mutiRoomUserList.get(i));
+			User user = clientManager.searchByUserNameInOnline(mutiRoomUserList.get(i));
 			users.add(user);
 			
 			if(i==mutiRoomUserList.size()-1)//마지막 유저이름
@@ -183,6 +191,16 @@ public class Server extends JFrame{
 	
 	public ArrayList<User> getFriendList(){
 		return clientManager.getUserList();
+	}
+
+	public User isExistingUser(String userName) {
+		User existingUser = clientManager.searchByUserNameInExist(userName);
+		return existingUser;
+	}
+
+	public ArrayList<ChattingRoom> getJoinRooms(String userName) {
+		
+		return roomManager.getJoinRooms(userName);
 	}
 	
 	

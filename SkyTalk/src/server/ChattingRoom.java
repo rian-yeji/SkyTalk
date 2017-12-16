@@ -6,6 +6,7 @@ public class ChattingRoom {
 	private ArrayList<User> userList;
 	private User roomOwner; //방장
 	String roomName; //방이름
+	String chat="\n";//채팅내용
 	
 	public ChattingRoom() {
 		userList = new ArrayList<User>();
@@ -52,6 +53,7 @@ public class ChattingRoom {
 	//방안의 모든 유저들에게 브로드캐스팅
 	public void broadcast(String str) {
 		String message = User.SIGNAL_NOMAL_MSG+"//"+roomName+"//"+str;
+		chat += str+"\n"+"\n";
 		for (int i = 0; i < userList.size(); i++) {
 			User user = userList.get(i);
 			user.send_Message(message);

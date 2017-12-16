@@ -79,6 +79,7 @@ public class User extends Thread{
 	public static final String SIGNAL_ONLINE_USER_LIST = "SIGNAL_ONLINE_USER_LIST";
 	//public static final String SIGNAL_UPDATE_FRIENDS_LIST = "SIGNAL_UPDATE_FRIENDS_LIST";
 	public static final String SIGNAL_NEW_USER_CONNECT = "SIGNAL_NEW_USER_CONNECT";
+	public static final String SIGNAL_EXIST_USER_CONNECT = "SIGNAL_EXIST_USER_CONNECT";
 	public static final String SIGNAL_CHANGE_STATE = "SIGNAL_CHANGE_STATE_MSG";
 	
 	/*메시지 처리 부분*/
@@ -113,9 +114,31 @@ public class User extends Thread{
 			//소켓연결 직후 유저아이디 받는부분
 			textArea.append("유저아이디 수신 : "+array[1]+"\n");
 			textArea.setCaretPosition(textArea.getText().length());
-			setNickname(array[1]);
-			//새 유저가 추가될 경우 기존의 유저들의 리스트를 업데이트
-			server.usersUpdateFriendList(array[1]);
+			
+			//기존의 유저인지 판별 후 다르게 작동
+			if(server.isExistingUser(array[1])!=null) {
+				User existingUser=server.isExistingUser(array[1]);
+				ArrayList<ChattingRoom> existingRooms = server.getJoinRooms(array[1]);
+				
+				setNickname(array[1]);
+				setStateImage(existingUser.getStateImage());
+				setStateMessage(existingUser.getStateMessage());
+				for(int i=0;i<existingRooms.size();i++) {
+					send_Message(SIGNAL_EXIST_USER_CONNECT+"//"+existingRooms.get(i).roomName+"//"+existingRooms.get(i).chat);
+					System.out.println("User->기존 채팅방 목록,내용전송 "+i);
+				}
+				
+				textArea.append("기존 유저입니다.\n");
+				textArea.setCaretPosition(textArea.getText().length());
+			}
+			else {
+				setNickname(array[1]);
+				//새 유저가 추가될 경우 기존의 유저들의 리스트를 업데이트
+				server.usersUpdateFriendList(array[1]);
+				textArea.append("신규유저입니다.\n");
+				textArea.setCaretPosition(textArea.getText().length());
+			}
+			
 		}
 		else if(array[0].equals(SIGNAL_NOMAL_MSG)){//일반 채팅 메시지
 			//textArea.append("사용자로부터 들어온 메세지 : " + str+"\n");

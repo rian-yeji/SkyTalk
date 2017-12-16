@@ -103,11 +103,6 @@ public class LoginPanel extends JPanel {
 		public Myaction() {
 
 		}
-		
-                       /////////////////////////////////////////
-                      //         상태메세지 서버에서 받아와야함                  //
-                     /////////////////////////////////////////
-		
 
 		@Override
 		public void actionPerformed(ActionEvent e) {

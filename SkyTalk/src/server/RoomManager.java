@@ -8,13 +8,14 @@ import javax.swing.JTextArea;
 public class RoomManager {
 
 	private static ArrayList<ChattingRoom> roomList;
+	private static HashMap<String,ArrayList<ChattingRoom>> backupRoomList;
 	Server server;
 	private static JTextArea textArea = Server.textArea;
-	public HashMap<String,ChattingRoom[]> tempRoom = new HashMap<String,ChattingRoom[]>();
 	
 	
 	public RoomManager(Server server) {
 		roomList = new ArrayList<ChattingRoom>();
+		backupRoomList = new HashMap<String,ArrayList<ChattingRoom>>();
 		this.server = server;
 	}
 	
@@ -66,13 +67,19 @@ public class RoomManager {
 	}
 	
 	public void exitUser(User user) {
-		ArrayList<ChattingRoom> temp = new ArrayList<ChattingRoom>();
+		ArrayList<ChattingRoom> backup = new ArrayList<ChattingRoom>();
 		for(int i=0;i<roomList.size();i++) {
 			if(roomList.get(i).isUserJoin(user)==true) {
 				roomList.get(i).ExitRoom(user);
-				temp.add(roomList.get(i));
+				backup.add(roomList.get(i));
 			}
 		}
+		backupRoomList.put(user.getNickname(), backup);
+		System.out.println("Backup Room : "+user.getNickname()+"-> roomList "+backupRoomList.get(user.getNickname()).size());
+	}
+
+	public ArrayList<ChattingRoom> getJoinRooms(String userName) {
+		return backupRoomList.get(userName);
 	}
 	
 }

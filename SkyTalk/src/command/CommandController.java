@@ -115,16 +115,23 @@ public class CommandController {
 							/*String chattingRoomName = array[1];//채팅방이름
 							setRoomName(chattingRoomName);*/
 							roomName = array[1];
-							System.out.println("CommandControll -> roomName "+roomName);
-							ChatFrame a = new ChatFrame(roomName); //처음 방이 생성된 경우 채팅방창을 띄움
-							chattingRoomList.put(roomName, a.getChatPanel().getTextPaneChat());	//채팅방들의 TextPane을 해쉬맵으로 저장
-							
-							///////////////////////////////////////////////////////////////////////////////////
-							JLabel room = new JLabel(roomName);
-							ChatRoom.add(room); //처음 방이 생성되면 chatting목록에 추가함
-							for(JLabel j:ChatRoom) {
-								System.out.println("채팅방 리스트 추가 -> " + j.getText().toString());
+							if(chattingRoomList.get(roomName)==null) { //처음 생성되는 방
+								System.out.println("CommandControll -> roomName "+roomName);
+								ChatFrame a = new ChatFrame(roomName); //처음 방이 생성된 경우 채팅방창을 띄움
+								chattingRoomList.put(roomName, a.getChatPanel().getTextPaneChat());	//채팅방들의 TextPane을 해쉬맵으로 저장
+								
+								///////////////////////////////////////////////////////////////////////////////////
+								JLabel room = new JLabel(roomName);
+								ChatRoom.add(room); //처음 방이 생성되면 chatting목록에 추가함
+								for(JLabel j:ChatRoom) {
+									System.out.println("채팅방 리스트 추가 -> " + j.getText().toString());
+								}
 							}
+							else {
+								//이미 있는 방이라고 알림창 띄우기
+								
+							}
+							
 						}
 						else if(array[0].equals(User.SIGNAL_NOMAL_MSG)) {
 							//String message = User.SIGNAL_NOMAL_MSG+"//"+roomName+"//"+str;
@@ -133,14 +140,6 @@ public class CommandController {
 							append_Message(roomName,str + "\n");
 						}
 						else if(array[0].equals(User.SIGNAL_ONLINE_USER_LIST)) {
-							/*onlineUserList.clear();
-							userLabel.clear(); //초기화
-							for(int i=1; i<array.length;i++) {
-								System.out.println(array[i]);
-								userLabel.add(new JLabel(array[i]));
-								//System.out.println(userLabel.get(i).getText());
-								onlineUserList.add(new UserInfo(array[i]));
-							}*/
 							//msg =  Signal//유저이름!!상태이미지!!상태메시지//유저이름!!상태이미지!!상태메시지....
 							userLabel.clear();
 							onlineUserList.clear(); //접속중인 유저 리스트 초기화
@@ -157,15 +156,24 @@ public class CommandController {
 								onlineUserList.add(user);
 							}
 						}
-						//================================================================
 						else if(array[0].equals(User.SIGNAL_NEW_USER_CONNECT)) {
 							//새로운 유저가 추가 array[1]:갱신 대상 유저 이름 array[2]:새 유저이름 
 							//기존 유저들의 frendList에 새로운 유저를 추가(갱신X)
 							System.out.println("CommandController->SIGNAL_NEW_USER_CONNECT userName="+array[2]);
 							//friendPanel의 dataSetting을 호출해야함
 							mainFrameList.get(array[1]).getStartPanel().friendPanel.update(array[2]);
-							/*mainFrameList.get(array[1]).getStartPanel().repaint();
-							mainFrameList.get(array[1]).repaint();*/
+						}
+						else if(array[0].equals(User.SIGNAL_EXIST_USER_CONNECT)) {
+							/*SIGNAL_EXIST_USER_CONNECT+"//"+existingRooms.get(i).roomName+"//"+existingRooms.get(i).chat*/
+							JLabel room = new JLabel(array[1]);
+							ChatRoom.add(room);
+							
+							JTextPane temp = new JTextPane();
+							temp.setText(array[2]);
+							chattingRoomList.put(array[1], temp);	//채팅방들의 TextPane을 해쉬맵으로 저장
+							
+							
+							//=========================================================================
 						}
 						else if(array[0].equals(User.SIGNAL_CHANGE_STATE)) {
 							//유저의 상태이미지나 상태메시지 변경이 있다면 모든 유저들의 화면을 갱신
