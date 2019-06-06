@@ -13,13 +13,14 @@
 
 
 # 시스템 구성도
-
+<img src="/image/Architecture.png">
 
 # 주요 기능 프로토콜
-
+<img src="/image/protocol1.png">
+<img src="/image/protocol2.png">
 
 # 시현 화면
-
+<img src="/image/program_capture.png">
 
 
 ### 역할 분담
