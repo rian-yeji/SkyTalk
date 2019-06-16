@@ -1,5 +1,5 @@
 # Sky Talk
-Skt Talk는 카카오톡 PC버전을 모티브로한 간단한 채팅 프로그램입니다.
+Sky Talk는 카카오톡 PC버전을 모티브로한 간단한 채팅 프로그램입니다.
 Socket API를 이용하여 Client/Server 구조로 설계, Java언어로 작성되었습니다.
 
 # Sky Talk 주요기능
